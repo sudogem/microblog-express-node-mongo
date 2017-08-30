@@ -15,3 +15,6 @@ Sample live preview: http://nodeblog-v1.mybluemix.net/#/
 $ oc login https://api.starter-us-west-2.openshift.com
 $ oc project microblog-node
 $ oc status
+
+From the root of your app you execute this command:
+$ oc start-build nodejs-mongo-persistent -n microblog-node
