@@ -1,0 +1,32 @@
+doctype
+html(lang="en")
+  head
+    title= title
+    base(href="/")
+    link(rel='stylesheet', href='https://cdn.jsdelivr.net/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/stylesheets/now-ui-kit.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body(ng-app="app" id="container" ng-cloak)
+    block loginForm
+    block masterHeader
+    block header
+    block body
+    block footer
+
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+    script(src='javascripts/lib/tether.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+
+    script(src='/bower_components/angular/angular.js')
+    script(src='/bower_components/angular-cookies/angular-cookies.min.js')
+    script(src='/bower_components/angular-route/angular-route.min.js')
+    script(src='/bower_components/underscore/underscore-min.js')
+    script(src='javascripts/app.js')
+    script(src='javascripts/settings.js')
+    script(src='javascripts/underscore.js')
+    script(src='javascripts/flash.js')
+    script(src='javascripts/utils.js')
+    script(src='javascripts/authorize.js')
+    script(src='javascripts/unauthorize.js')
+    script(src='javascripts/abort.js')
+    script(src='javascripts/controllers.js')

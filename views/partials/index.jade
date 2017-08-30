@@ -1,0 +1,18 @@
+- var user = { name: 'kjkjkjk' }
+
+div(ng-show="flash.getMessage()")
+  p {{flash.getMessage()}}
+
+div(ng-if="(total == 0)")
+  p No post found.
+
+div(ng-if="(total > 0)")
+  p There are {{total}} posts
+  div(class='entry', ng-repeat='post in posts')
+    h3 {{post.title}}
+    div {{post.body}}
+    |   
+    a(href='/#edit_post/{{post._id}}') Edit
+    |   |   
+    a(href='/#delete_post/{{post._id}}') Delete
+

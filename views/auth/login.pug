@@ -1,0 +1,18 @@
+block loginForm
+  h2 Login
+  div(class='row')
+    div(class='col-sm-8 blog-main')
+      div(ng-show="errors")
+        div(class='alert alert-danger' role='alert')
+          span {{errors}}
+
+      div(class='form-group')
+        label(for='username') Email:
+        input(class='form-control' placeholder='Email' ng-model='data.username', name='username')
+
+        div(class='form-group')
+          label(for='password') Password:
+          input(class='form-control' placeholder='Username' ng-model='data.password', name='password' type='password')
+
+      p
+        button(class='btn btn-info btn-round' ng-click='doLogin()') Login

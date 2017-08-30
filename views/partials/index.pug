@@ -1,0 +1,16 @@
+div(ng-show="flash.getMessage()")
+  div(class='alert alert-success' role='alert')
+    span {{flash.getMessage()}}
+
+div(ng-if="(total == 0)")
+  p No post found.
+
+div(ng-if="(total > 0)")
+  h4 #[em Total:] #[strong {{total}}] blog posts
+  div(class='blog-post' ng-repeat='post in posts')
+    h2(class='blog-post-title') {{post.title}}
+    p(class='blog-post-meta') {{post.created_at}}
+    p {{post.body}}
+    div(ng-if="isAuthorized" class='actionButton')
+      a(class='btn btn-info btn-round pad1' href='/#edit_post/{{post._id}}') Edit
+      a(class='btn btn-danger btn-round' href='/#delete_post/{{post._id}}') Delete
