@@ -169,7 +169,9 @@ controller('AuthController.login', ['$scope', '$rootScope', '$http', '$location'
     $scope.doLogin = function() {
       // console.log('AuthController.login', $scope.data);
       var endpoint = appConfig.baseURLApi;
-      $http.post(endpoint + '/api/v1/ui/auth', {
+      endpoint = endpoint + '/api/v1/ui/auth';
+      endpoint = endpoint.replace(/([^:])(\/\/+)/g, '$1/');
+      $http.post(endpoint, {
         username: $scope.data.username,
         password: $scope.data.password
       })
@@ -192,13 +194,14 @@ controller('AuthController.login', ['$scope', '$rootScope', '$http', '$location'
         }
       });
     }
-
   }]).
 controller('AuthController.logout', ['$rootScope', '$scope', '$http', '$location', '$cookies', 'flash', 'appConfig',
   function($rootScope, $scope, $http, $location, $cookies, flash, appConfig){
     console.log('AuthController.logout');
     var endpoint = appConfig.baseURLApi;
-    $http.get(endpoint + '/api/v1/auth/logout')
+    endpoint = endpoint + '/api/v1/auth/logout';
+    endpoint = endpoint.replace(/([^:])(\/\/+)/g, '$1/');
+    $http.get(endpoint)
     .success(function(data, status, headers, config) {
       flash.setMessage({msg: 'Successfully logout.'});
     })
