@@ -40,6 +40,14 @@ module.exports = function(app, passport){
     });
   });
 
+  var cnt=0;
+  router.get('/pagecount', function(req, res, next){
+    cnt = cnt + 1;
+    var resp = {'pagecount': cnt};
+    console.log('[site.controller.js] [/pagecount] pagecount:',cnt);
+    res.send(resp);
+  });
+
   // lets render the jade file into HTML
   router.get('/partials/:name', middleware.isAuthenticated, function(req, res) {
     var name = req.params.name;

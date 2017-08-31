@@ -14,7 +14,8 @@ Sample live preview: http://nodeblog-v1.mybluemix.net/#/
 #### How to deploy to Openshift 3:
 $ oc login https://api.starter-us-west-2.openshift.com
 $ oc project microblog-node
-$ oc status
+$ oc status -v <-- to check the status
 
 From the root of your app you execute this command:
 $ oc start-build nodejs-mongo-persistent -n microblog-node
+$ oc status -v
