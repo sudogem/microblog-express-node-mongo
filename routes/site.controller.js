@@ -76,6 +76,7 @@ module.exports = function(app, passport){
     var host = req.headers.host;
     var protocol = (req.secure) ? 'https://' : 'http://';
     var auth_url = protocol + host + '/api/v1/auth';
+    var auth_url = auth_url.replace(/([^:])(\/\/+)/g, '$1/');
     console.log(' ');
     console.log('===================================================================');
     console.log('Checking authentication status...');
