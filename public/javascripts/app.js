@@ -61,6 +61,7 @@ app.run(['$rootScope', '$window', '$cookies', '$location',
       .when('/add', { controller: 'AddNewPostController', templateUrl: 'partials/add_new_post', public: false})
       .when('/edit_post/:id', { controller: 'EditPostController', templateUrl: 'partials/edit_post', public: false})
       .when('/delete_post/:id', { controller: 'DeletePostController', templateUrl: 'partials/delete_post', public: false})
+      .when('/signup', { controller: 'SignupController', templateUrl: 'partials/signup', public: true})
       .when('/login', { controller: 'AuthController.login', templateUrl: 'api/v1/auth/loginform', public: true})
       .when('/logout', { controller: 'AuthController.logout', template: ''})
       .when('/', {

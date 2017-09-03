@@ -155,8 +155,15 @@ controller('DeletePostController', function($rootScope, $scope, $routeParams, $h
     utils.backToHome();
   };
 }).
-controller('AuthController.login', ['$scope', '$rootScope', '$http', '$location', '$cookies', 'flash', 'appConfig',
-  function($scope, $rootScope, $http, $location, $cookies, flash, appConfig) {
+controller('SignupController', function($rootScope, $scope, $http, $location, flash, utils, appConfig) {
+  $scope.doSignup = function() {
+    var endpoint = appConfig.baseURLApi;
+    endpoint = endpoint + '/api/user/create';
+    endpoint = endpoint.replace(/([^:])(\/\/+)/g, '$1/');
+
+  }
+}).
+controller('AuthController.login', ['$scope', '$rootScope', '$http', '$location', '$cookies', 'flash', 'appConfig', function($scope, $rootScope, $http, $location, $cookies, flash, appConfig) {
     $scope.data = {
       username: '',
       password: ''
@@ -194,9 +201,8 @@ controller('AuthController.login', ['$scope', '$rootScope', '$http', '$location'
         }
       });
     }
-  }]).
-controller('AuthController.logout', ['$rootScope', '$scope', '$http', '$location', '$cookies', 'flash', 'appConfig',
-  function($rootScope, $scope, $http, $location, $cookies, flash, appConfig){
+}]).
+controller('AuthController.logout', ['$rootScope', '$scope', '$http', '$location', '$cookies', 'flash', 'appConfig', function($rootScope, $scope, $http, $location, $cookies, flash, appConfig){
     console.log('AuthController.logout');
     var endpoint = appConfig.baseURLApi;
     endpoint = endpoint + '/api/v1/auth/logout';

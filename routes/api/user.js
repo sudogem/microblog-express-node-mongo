@@ -24,6 +24,6 @@ module.exports = function(app, includes) {
     });
   }
 
-  app.post('/api/user/create', middleware.isAuthenticated, createUser);
+  app.post('/api/user/create', createUser);
   app.get('/api/user/isauthenticated', middleware.isAuthenticated, isAuthenticated);
 };

@@ -21,10 +21,7 @@ switch(nodeEnv) {
             JWTTokenSecret: process.env.JWTTokenSecret || '91fe211053c6377ddfd218a061f96'
           },
           baseURLApi: process.env.baseURL_API_DEV,
-          siteName: 'Microblog-Node (DEV)',
-          mongoDB: {
-            mongoDB_URL: process.env.mongoDB_URL_DEV
-          }
+          siteName: 'Microblog-Node (DEV)'
         }
       }
     }
@@ -39,10 +36,7 @@ switch(nodeEnv) {
             JWTTokenSecret: process.env.JWTTokenSecret || '91fe211053c6377ddfd218a061f96',
           },
           baseURLApi: process.env.baseURL_API_PROD,
-          siteName: 'Microblog-Node (PROD)',
-          mongoDB: {
-            mongoDB_URL: process.env.mongoDB_URL_PROD
-          }
+          siteName: 'Microblog-Node (PROD)'
         }
       }
     }
