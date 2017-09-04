@@ -157,10 +157,32 @@ controller('DeletePostController', function($rootScope, $scope, $routeParams, $h
 }).
 controller('SignupController', function($rootScope, $scope, $http, $location, flash, utils, appConfig) {
   $scope.doSignup = function() {
+    console.log('[SignupController] doSignup()',$scope.data);
     var endpoint = appConfig.baseURLApi;
     endpoint = endpoint + '/api/user/create';
-    endpoint = endpoint.replace(/([^:])(\/\/+)/g, '$1/');
-
+    endpoint = endpoint.replace(/([^:])(\/\/+)/g, '$1/').toString();
+    var userObj = {
+      email: $scope.data.username,
+      password: $scope.data.password,
+      passwordConfirmation: $scope.data.passwordConfirmation,
+      fullname: $scope.data.fullname
+    }
+    console.log('[SignupController] doSignup() userObj:',userObj);
+    $http.post(endpoint, {"user": userObj})
+      .success(function(data, status, headers, config){
+        console.log('[SignupController] doSignup() data:',data);
+        flash.setMessage('You have successfully registered.');
+        $location.path('/');
+      })
+      .error(function(data, status, headers, config) {
+        $scope.loading = false;
+        console.log('[SignupController] doSignup() err:',data);
+        if (data && data.errors) {
+          $scope.errors = data.errors;
+        } else {
+          $scope.errors = ['Unknown error occurred'];
+        }
+      });
   }
 }).
 controller('AuthController.login', ['$scope', '$rootScope', '$http', '$location', '$cookies', 'flash', 'appConfig', function($scope, $rootScope, $http, $location, $cookies, flash, appConfig) {

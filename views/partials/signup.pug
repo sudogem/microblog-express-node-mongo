@@ -10,12 +10,17 @@ block loginForm
         label(for='username') Email:
         input(class='form-control' placeholder='Email' ng-model='data.username', name='username')
 
-        div(class='form-group')
-          label(for='password') Password:
-          input(class='form-control' placeholder='' ng-model='data.password', name='password' type='password')
+      div(class='form-group')
+        label(for='fullname') FullName:
+        input(class='form-control' placeholder='Full Name' ng-model='data.fullname', name='fullname')
 
-        div(class='form-group')
-          label(for='passwordConfirmation') Retype Password:
-          input(class='form-control' placeholder='' ng-model='data.passwordConfirmation', name='passwordConfirmation' type='password')
+      div(class='form-group')
+        label(for='password') Password:
+        input(class='form-control' placeholder='' ng-model='data.password', name='password' type='password')
+
+      div(class='form-group')
+        label(for='passwordConfirmation') Retype Password:
+        input(class='form-control' placeholder='' ng-model='data.passwordConfirmation', name='passwordConfirmation' type='password')
+
       p
         button(class='btn btn-info btn-round' ng-click='doSignup()') Login

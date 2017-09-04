@@ -4,14 +4,21 @@ module.exports = function(app, includes) {
   var middleware = includes.middleware;
 
   var createUser = function(req, res) {
-    console.log('[routes/api/user.js] createUser:',req.body);
-    UserModel.create(req.body)
+    var userData;
+    try {
+      userData = JSON.parse(req.body.user);
+      console.log('[routes/api/user.js] createUser():',userData);
+    } catch(e) {
+      userData = req.body.user;
+      console.log('[routes/api/user.js] createUser() err:',userData);
+    }
+    UserModel.create(userData)
       .then(function(result) {
-        console.log('[routes/api/user.js] result:',result);
+        console.log('[routes/api/user.js] createUser() result:',result);
         res.status(200).json(result);
       })
       .catch(function(err) {
-        console.log('[routes/api/user.js] err:',err);
+        console.log('[routes/api/user.js] createUser() err:',err);
         res.status(404).json(err);
       });
   };

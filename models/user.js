@@ -3,14 +3,14 @@ var Schema = mongoose.Schema;
 var Promise = require('bluebird');
 var moment = require('moment');
 var validator = require('validator');
-var Validator = require('validator').Validator;
-var val = new Validator();
+var bcrypt = require('bcrypt-nodejs');
 
 var userSchema = {
-  userId: {
-    type: String,
-    required: [true, 'UserId is required.'],
-    unique: true
+  _id: {
+    type: mongoose.Schema.Types.ObjectId,
+    index: true,
+    required: true,
+    auto: true,
   },
   fullname: {
     type: String,
@@ -20,7 +20,7 @@ var userSchema = {
     type: String,
     required: [true, 'Email is required.'],
     unique: true,
-    validate: [{validator: validator.isEmail, msg: 'Invalid email'}]
+    validate: [{validator: validator.isEmail, msg: 'Invalid email.'}]
   },
   passwordHash: {type: String, required: true}
 };
@@ -34,9 +34,9 @@ UserSchema.virtual('password')
 })
 .set(function(value) {
   this._password = value;
-  // var salt = bcrypt.gen_salt_sync(12);
-  // this.passwordHash = bcrypt.encrypt_sync(value, salt);
-  this.passwordHash = value;
+  var salt = bcrypt.genSaltSync(8);
+  this.passwordHash = bcrypt.hashSync(value, salt);
+  // this.passwordHash = value; // clear password
 });
 
 UserSchema.virtual('passwordConfirmation')
@@ -49,16 +49,16 @@ UserSchema.virtual('passwordConfirmation')
 
 UserSchema.path('passwordHash').validate(function(v) {
   if (this._password || this._passwordConfirmation) {
-    if (!val.check(this._password).min(6)) {
-      this.invalidate('password', 'must be at least 6 characters.');
+    if (this._password.length < 6) {
+      this.invalidate('password', 'Password must be at least 6 characters.');
     }
     if (this._password !== this._passwordConfirmation) {
-      this.invalidate('passwordConfirmation', 'must match confirmation.');
+      this.invalidate('passwordConfirmation', 'Password does not match the confirm password.');
     }
   }
 
   if (this.isNew && !this._password) {
-    this.invalidate('password', 'required');
+    this.invalidate('password', 'Password is required.');
   }
 }, null);
 
