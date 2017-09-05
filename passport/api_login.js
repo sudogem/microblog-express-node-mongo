@@ -2,6 +2,7 @@ var BasicStrategy   = require('passport-http').BasicStrategy;
 var jwt = require('jwt-simple');
 var moment = require('moment');
 var config = require('../settings');
+var UserModel = require('../../models/user');
 
 module.exports = function(passport) {
   passport.use('api_login', new BasicStrategy(
@@ -38,11 +39,21 @@ module.exports = function(passport) {
     if (username == '' || password == '') {
       return done({'message': 'Please enter your username/password.'});
     }
-    if (username === 'user@mail.com' && password === 'test') {
-      return done(null, username);
-    } else {
-      return done({'message': 'Invalid username/password. Please try again!'});
-    }
+
+    UserModel.find({email: username, password: password})
+      .then(function(result) {
+        console.log('result:',result);
+        return done(null, username);
+      })
+      .catch(function(err) {
+        return done({'message': 'Invalid username/password. Please try again!'});
+      });
+
+    // if (username === 'user@mail.com' && password === 'test') {
+    //   return done(null, username);
+    // } else {
+    //   return done({'message': 'Invalid username/password. Please try again!'});
+    // }
   }
 
   var authenticate = function(user, done) {

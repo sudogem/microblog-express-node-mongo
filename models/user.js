@@ -4,6 +4,7 @@ var Promise = require('bluebird');
 var moment = require('moment');
 var validator = require('validator');
 var bcrypt = require('bcrypt-nodejs');
+var settings = require('../settings');
 
 var userSchema = {
   _id: {
@@ -73,6 +74,21 @@ var user = {
           return reject(err);
         });
     });
+  },
+
+  find: function(userData) {
+    return new Promise(function(resolve, reject) {
+      var salt = settings.userSaltKey;
+      var passwordHash = bcrypt.hashSync(userData.password, salt);
+      User.findOne({'email': userData.email, 'passwordHash': passwordHash})
+        .then(function(result) {
+          console.log('find result:',result);
+          resolve(result);
+        })
+        .catch( /* istanbul ignore next */ function(err){
+          return reject(err);
+        });
+    }
   }
 };
 

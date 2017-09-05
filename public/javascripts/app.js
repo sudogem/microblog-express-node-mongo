@@ -8,7 +8,8 @@ var app = angular.module('app', [
   'ngRoute',
   'ngCookies',
   'abort',
-  'underscore'
+  'underscore',
+  'ngFlash'
 ]);
 
 app.run(['$rootScope', '$window', '$cookies', '$location',

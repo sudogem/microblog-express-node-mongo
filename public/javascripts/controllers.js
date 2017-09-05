@@ -1,8 +1,8 @@
 angular.module('blog.controllers', []).
-controller('IndexController', function($rootScope, $scope, $http, $cookies, flash, utils) {
+controller('IndexController', function($rootScope, $scope, $http, $cookies, flash, utils, Flash) {
   $scope.activeTab = 'home';
   $scope.isAuthorized = false;
-  // console.log('IndexController env:', env);
+  // console.log('[IndexController] env:', env);
   var currentUser = $cookies.getObject('user');
   var token = '';
   if ($rootScope.globalUser || (currentUser && currentUser.token)) {
@@ -12,10 +12,11 @@ controller('IndexController', function($rootScope, $scope, $http, $cookies, flas
 
   $http.get('/api/post')
     .success(function(data, status, headers, config) {
-      console.log('IndexController isAuthorized:',data);
+      console.log('[IndexController] isAuthorized:',data);
+      console.log('[IndexController] flash.getMessage:',flash.getMessage() );
       $scope.total = data.posts.length;
       $scope.posts = data.posts;
-      $scope.flash = flash;
+      // $scope.flash = flash;
       $scope.isAuthorized = data.isAuthorized;
       if(!data.isAuthorized){
         $rootScope.globalUser = false;
@@ -23,10 +24,10 @@ controller('IndexController', function($rootScope, $scope, $http, $cookies, flas
     })
     .error(function(data, status, headers, config) {
       $scope.isAuthorized = false;
-      console.log('IndexController error:', data);
+      console.log('[IndexController] error:', data);
     });
 }).
-controller('AddNewPostController', function($rootScope, $scope, $http, $location, flash, utils, _) {
+controller('AddNewPostController', function($rootScope, $scope, $http, $location, flash, utils, _, Flash) {
   $scope.form = {};
   $scope.activeTab = 'add';
   utils.isAuthenticated();
@@ -52,7 +53,8 @@ controller('AddNewPostController', function($rootScope, $scope, $http, $location
           $scope.form.error = data.msg;
           $scope.form.formError = true;
         } else {
-          flash.setMessage(data.msg);
+          // flash.setMessage(data.msg);
+          Flash.create('success', 'Successfully saved post.', 0, {class: 'custom-class', id: 'custom-id'}, false);
           $location.path('/');
         }
       })
@@ -75,7 +77,7 @@ controller('AddNewPostController', function($rootScope, $scope, $http, $location
     utils.backToHome();
   };
 }).
-controller('EditPostController', function($rootScope, $scope, $routeParams, $http, $location, flash, utils) {
+controller('EditPostController', function($rootScope, $scope, $routeParams, $http, $location, flash, utils, Flash) {
   utils.isAuthenticated();
   var id = $routeParams.id;
   console.log('[EditPostController] id:', id);
@@ -97,7 +99,7 @@ controller('EditPostController', function($rootScope, $scope, $routeParams, $htt
       .success(function(data, status, headers, config) {
         console.log('[EditPostController] data:', data);
         $scope.form = data.post;
-        flash.setMessage(data.msg);
+        Flash.create('success', 'Successfully updated post.', 0, {class: 'custom-class', id: 'custom-id'}, true);
         $location.url('/');
       })
       .error(function(data, status, headers, config) {
@@ -118,7 +120,7 @@ controller('EditPostController', function($rootScope, $scope, $routeParams, $htt
     utils.backToHome();
   };
 }).
-controller('DeletePostController', function($rootScope, $scope, $routeParams, $http, $location, flash, utils) {
+controller('DeletePostController', function($rootScope, $scope, $routeParams, $http, $location, flash, utils, Flash) {
   console.log('[DeletePostController]');
   utils.isAuthenticated();
   var id = $routeParams.id;
@@ -135,7 +137,8 @@ controller('DeletePostController', function($rootScope, $scope, $routeParams, $h
     $http.delete('/api/post/'+id)
       .success(function(data, status, headers, config) {
         console.log('[DeletePostController] deletePost() data:', data);
-        flash.setMessage(data.msg);
+        // flash.setMessage(data.msg);
+        Flash.create('success', 'Successfully deleted post.', 0, {class: 'custom-class', id: 'custom-id'}, true);
         $location.url('/');
       })
       .error(function(data, status, headers, config) {
@@ -155,7 +158,7 @@ controller('DeletePostController', function($rootScope, $scope, $routeParams, $h
     utils.backToHome();
   };
 }).
-controller('SignupController', function($rootScope, $scope, $http, $location, flash, utils, appConfig) {
+controller('SignupController', function($rootScope, $scope, $http, $location, flash, utils, appConfig, Flash) {
   $scope.doSignup = function() {
     console.log('[SignupController] doSignup()',$scope.data);
     var endpoint = appConfig.baseURLApi;
@@ -171,7 +174,8 @@ controller('SignupController', function($rootScope, $scope, $http, $location, fl
     $http.post(endpoint, {"user": userObj})
       .success(function(data, status, headers, config){
         console.log('[SignupController] doSignup() data:',data);
-        flash.setMessage('You have successfully registered.');
+        // flash.setMessage('You have successfully registered.');
+        Flash.create('success', 'You have successfully registered.', 0, {class: 'custom-class', id: 'custom-id'}, true);
         $location.path('/');
       })
       .error(function(data, status, headers, config) {
