@@ -13,7 +13,8 @@ var postSchema = {
   body: {
     type: String,
     required: [true, 'Post body is required.'], // i18n.__('PostBodyRequired')
-  }
+  },
+  author: {type: Schema.Types.ObjectId, ref: 'users'}
 }
 
 var PostSchema = new Schema(postSchema, { timestamps: {createdAt: 'created_at', updatedAt: 'updated_at'} });
@@ -23,6 +24,7 @@ var post = {
   create: function(postData) {
     return new Promise(function(resolve, reject) {
       // return Post.create(postData); // invalid calling
+      console.log('\n[models/posts.js] create() postData:',postData);
       Post.create(postData)
         .then(function(result) {
           resolve(result);
@@ -97,24 +99,28 @@ var post = {
             return reject(err);
           });
       } else {
-        Post.find().sort({'updated_at': -1}).exec()
-        .then(function(result){
-          var newResult = [];
-          _.each(result, function(item){
-            var obj = {
-              _id: item._id,
-              title: item.title,
-              body: item.body,
-              created_at: moment(item.created_at).format("ddd, MMMM D YYYY, h:mm:ss A"),
-              updated_at: moment(item.updated_at).format("ddd, MMMM D YYYY, h:mm:ss A")
-            };
-            newResult.push(obj);
+        // Here we populate our post author http://mongoosejs.com/docs/populate.html
+        Post.find().sort({'updated_at': -1})
+          .populate('author')
+          .exec()
+          .then(function(result){
+            var newResult = [];
+            _.each(result, function(item){
+              var obj = {
+                _id: item._id,
+                title: item.title,
+                body: item.body,
+                author: item.author.fullname,
+                created_at: moment(item.created_at).format("ddd, MMMM D YYYY, h:mm:ss A"),
+                updated_at: moment(item.updated_at).format("ddd, MMMM D YYYY, h:mm:ss A")
+              };
+              newResult.push(obj);
+            });
+            resolve(newResult);
+          })
+          .catch(function(err){
+            reject({'error':err});
           });
-          resolve(newResult);
-        })
-        .catch(function(err){
-          reject({'error':err});
-        });
       }
     });
   }

@@ -6,6 +6,8 @@ module.exports = function(app, includes) {
 
   createPost = function(req, res) {
     console.log('[routes/api/post.js] createPost():',req.body);
+    req.body.author = req.user.iss;
+    console.log('[routes/api/post.js] createPost() req.user.iss:',req.user.iss);
     PostModel.create(req.body)
       .then(function(result) {
         console.log('[routes/api/post.js] createPost() result:',result);

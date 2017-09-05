@@ -29,6 +29,7 @@ controller('IndexController', function($rootScope, $scope, $http, $cookies, flas
 }).
 controller('AddNewPostController', function($rootScope, $scope, $http, $location, flash, utils, _, Flash) {
   $scope.form = {};
+  // $scope.form.userId =
   $scope.activeTab = 'add';
   utils.isAuthenticated();
   // Check if user is authorized to access the page.

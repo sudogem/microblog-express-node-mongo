@@ -16,6 +16,9 @@ div(class='row')
     div(class='form-group')
       label(for='title') Body:
       textarea(class='form-control' placeholder='Enter the description here...' ng-model='form.body', cols='10', rows='3')
+
+      input(type='hidden' ng-model='form.userId')
+
     p
       button(class='btn btn-info btn-round pad1' ng-click='submitPost()') Submit Post
       button(class='btn btn-normal btn-round' ng-click='doCancel()') Cancel
