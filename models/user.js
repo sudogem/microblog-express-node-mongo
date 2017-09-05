@@ -23,7 +23,10 @@ var userSchema = {
     unique: true,
     validate: [{validator: validator.isEmail, msg: 'Invalid email.'}]
   },
-  passwordHash: {type: String, required: true},
+  passwordHash: {
+    type: String,
+    required: [true, 'Password is required.']
+  },
   articles: [{type: Schema.Types.ObjectId, ref: 'posts'}]
 };
 

@@ -2,9 +2,12 @@ block loginForm
   h2 Sign-up
   div(class='row')
     div(class='col-sm-8 blog-main')
-      div(ng-show="errors")
-        div(class='alert alert-danger' role='alert')
-          span {{errors}}
+      div(ng-show="form.formError")
+        div(class='alert alert-danger' role='alert' ng-repeat="err in form.error")
+          div(class='container')
+            div(class='alert-icon')
+              i(class='now-ui-icons travel_info')
+            span(ng-bind-html="err.message | unsafe")
 
       div(class='form-group')
         label(for='username') Email:

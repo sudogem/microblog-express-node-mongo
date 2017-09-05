@@ -29,7 +29,6 @@ controller('IndexController', function($rootScope, $scope, $http, $cookies, flas
 }).
 controller('AddNewPostController', function($rootScope, $scope, $http, $location, flash, utils, _, Flash) {
   $scope.form = {};
-  // $scope.form.userId =
   $scope.activeTab = 'add';
   utils.isAuthenticated();
   // Check if user is authorized to access the page.
@@ -55,7 +54,7 @@ controller('AddNewPostController', function($rootScope, $scope, $http, $location
           $scope.form.formError = true;
         } else {
           // flash.setMessage(data.msg);
-          Flash.create('success', 'Successfully saved post.', 0, {class: 'custom-class', id: 'custom-id'}, false);
+          Flash.create('success', 'Successfully saved post.', 2000, {class: 'custom-class', id: 'custom-id'}, true);
           $location.path('/');
         }
       })
@@ -100,7 +99,7 @@ controller('EditPostController', function($rootScope, $scope, $routeParams, $htt
       .success(function(data, status, headers, config) {
         console.log('[EditPostController] data:', data);
         $scope.form = data.post;
-        Flash.create('success', 'Successfully updated post.', 0, {class: 'custom-class', id: 'custom-id'}, true);
+        Flash.create('success', 'Successfully updated post.', 2000, {class: 'custom-class', id: 'custom-id'}, true);
         $location.url('/');
       })
       .error(function(data, status, headers, config) {
@@ -139,7 +138,7 @@ controller('DeletePostController', function($rootScope, $scope, $routeParams, $h
       .success(function(data, status, headers, config) {
         console.log('[DeletePostController] deletePost() data:', data);
         // flash.setMessage(data.msg);
-        Flash.create('success', 'Successfully deleted post.', 0, {class: 'custom-class', id: 'custom-id'}, true);
+        Flash.create('success', 'Successfully deleted post.', 2000, {class: 'custom-class', id: 'custom-id'}, true);
         $location.url('/');
       })
       .error(function(data, status, headers, config) {
@@ -159,7 +158,9 @@ controller('DeletePostController', function($rootScope, $scope, $routeParams, $h
     utils.backToHome();
   };
 }).
-controller('SignupController', function($rootScope, $scope, $http, $location, flash, utils, appConfig, Flash) {
+controller('SignupController', function(_, $rootScope, $scope, $http, $location, flash, utils, appConfig, Flash) {
+  $scope.data = {};
+  $scope.form = {};
   $scope.doSignup = function() {
     var endpoint = appConfig.baseURLApi;
     endpoint = endpoint + '/api/user/create';
@@ -182,7 +183,9 @@ controller('SignupController', function($rootScope, $scope, $http, $location, fl
         $scope.loading = false;
         console.log('[SignupController] doSignup() err:',data);
         if (data && data.errors) {
-          $scope.errors = data.errors;
+          // $scope.errors = data.errors;
+          $scope.form.formError = true;
+          $scope.form.error = data.errors;
         } else {
           $scope.errors = ['Unknown error occurred'];
         }
