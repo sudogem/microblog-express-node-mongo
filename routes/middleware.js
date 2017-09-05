@@ -2,10 +2,11 @@
 var config = require('../settings');
 var jwt = require('jwt-simple');
 var moment = require('moment');
+var UserModel = require('../models/user');
 
 exports.checkHeaderToken = function(req, res, next) {
   var token = req.headers['x-auth-token'];
-  console.log('[routes/middleware.js] exports.checkHeaderToken() token:',req.get('Authorization'));
+  // console.log('\n[routes/middleware.js] exports.checkHeaderToken() token:',token);
   if (!token) {
     res.status(401).json({
       'success': false,
@@ -15,7 +16,7 @@ exports.checkHeaderToken = function(req, res, next) {
   }
   try {
     var decoded = jwt.decode(token, config.JWTTokenSecret);
-    console.log('[routes/middleware.js] exports.checkHeaderToken() iss:',decoded.iss);
+    console.log('\n[routes/middleware.js] exports.checkHeaderToken() iss:',decoded.iss);
     verifyUser(decoded, function(err, result) {
       if (err) {
         res.status(401).json({
@@ -30,19 +31,6 @@ exports.checkHeaderToken = function(req, res, next) {
         return next();
       }
     });
-    // console.log('[routes/middleware.js] exports.checkHeaderToken() expiry:',moment(decoded.exp).format("DD MMM YYYY hh:mm a"));
-    // if (decoded.exp <= Date.now()) {
-    //   return res.status(401).json({'error': 'Access token has expired'});
-    // }
-    // if (decoded.iss === 123456789) { //request from ui
-    //   req.user = decoded;
-    //   return next();
-    // } else {
-    //   res.status(401).json({'error': 'Unauthorized - User is not valid'});
-    //   return;
-    // }
-    // users.get_one(decoded.iss, function(err, user) {
-    // });
   } catch (e) {
     res.status(500).json({
       'success': false,
@@ -54,6 +42,7 @@ exports.checkHeaderToken = function(req, res, next) {
 
 exports.isAuthenticated = function(req, res, next) {
   var token = req.headers['x-auth-token'];
+  console.log('\n[routes/middleware.js] exports.isAuthenticated() token:',token);
   req.authenticated = false;
   if (!token) {
     return next();
@@ -62,19 +51,20 @@ exports.isAuthenticated = function(req, res, next) {
     var decoded = jwt.decode(token, config.JWTTokenSecret);
     verifyUser(decoded, function(err, result) {
       if (err) {
-        console.log('[routes/middleware.js] exports.isAuthenticated() err:',err);
+        console.log('\n[routes/middleware.js] exports.isAuthenticated() err:',err);
         req.user = null;
         req.error = err; // pass the error to the next request..
-        return;
+        return next();
       }
       if (result) {
+        console.log('\n[routes/middleware.js] exports.isAuthenticated() result:',result);
         req.user = decoded;
         req.authenticated = true;
+        console.log('\n[routes/middleware.js] exports.isAuthenticated() req.authenticated:',req.authenticated);
+        console.log('\n[routes/middleware.js] exports.isAuthenticated() expiry:',moment(decoded.exp).format("DD MMM YYYY hh:mm:ss a"));
+        return next();
       }
     });
-    console.log('[routes/middleware.js] exports.isAuthenticated() req.authenticated:',req.authenticated);
-    console.log('[routes/middleware.js] exports.isAuthenticated() expiry:',moment(decoded.exp).format("DD MMM YYYY hh:mm:ss a"));
-    return next();
   }
 }
 
@@ -84,12 +74,22 @@ function verifyUser(decoded, cb) {
       if (decoded.exp <= Date.now()) {
         return cb({'message': 'Your session has expired. Please log in again.'});
       }
-      if (decoded.iss === 123456789) { //request from ui
-        // req.user = decoded;
-        return cb(null, true);
-      } else {
-        return cb({'message': 'Unauthorized - User is not valid'});
-      }
+
+      UserModel.findById(decoded.iss)
+        .then(function(result) {
+          // console.log('\n[routes/middleware.js] verifyUser() result:',result);
+          return cb(null, true);
+        })
+        .catch(function(err) {
+          // console.log('\n[routes/middleware.js] verifyUser() err:',err);
+          return cb({'message': 'Unauthorized - User is not valid'});
+        });
+      // if (decoded.iss === 123456789) { //request from ui
+      //   // req.user = decoded;
+      //   return cb(null, true);
+      // } else {
+      //   return cb({'message': 'Unauthorized - User is not valid'});
+      // }
     } catch (e) {
       return cb({'message': e});
     }

@@ -11,7 +11,8 @@ div(ng-if="(total > 0)")
   h4 #[em Total:] #[strong {{total}}] blog posts
   div(class='blog-post' ng-repeat='post in posts')
     h2(class='blog-post-title') {{post.title}}
-    p(class='blog-post-meta') {{post.created_at}}
+    p(class='blog-post-meta') {{post.updated_at}}
+    p(class='blog-post-meta') Author: xxx
     p {{post.body}}
     div(ng-if="isAuthorized" class='actionButton')
       a(class='btn btn-info btn-round pad1' href='/#edit_post/{{post._id}}') Edit

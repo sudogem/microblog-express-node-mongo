@@ -160,7 +160,6 @@ controller('DeletePostController', function($rootScope, $scope, $routeParams, $h
 }).
 controller('SignupController', function($rootScope, $scope, $http, $location, flash, utils, appConfig, Flash) {
   $scope.doSignup = function() {
-    console.log('[SignupController] doSignup()',$scope.data);
     var endpoint = appConfig.baseURLApi;
     endpoint = endpoint + '/api/user/create';
     endpoint = endpoint.replace(/([^:])(\/\/+)/g, '$1/').toString();

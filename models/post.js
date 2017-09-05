@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 var Promise = require('bluebird');
 var moment = require('moment');
 var i18n = require('i18n');
+var _ = require('underscore');
 
 var postSchema = {
   title: {
@@ -12,18 +13,10 @@ var postSchema = {
   body: {
     type: String,
     required: [true, 'Post body is required.'], // i18n.__('PostBodyRequired')
-  },
-  created_at: {
-    type: Date,
-    default: new Date(moment.utc())
-  },
-  updated_at: {
-    type: Date,
-    default: new Date(moment.utc())
   }
 }
 
-var PostSchema = new Schema(postSchema);
+var PostSchema = new Schema(postSchema, { timestamps: {createdAt: 'created_at', updatedAt: 'updated_at'} });
 var Post = mongoose.model('posts', PostSchema);
 
 var post = {
@@ -104,9 +97,20 @@ var post = {
             return reject(err);
           });
       } else {
-        Post.find().sort('-updated_at').exec()
+        Post.find().sort({'updated_at': -1}).exec()
         .then(function(result){
-          resolve(result);
+          var newResult = [];
+          _.each(result, function(item){
+            var obj = {
+              _id: item._id,
+              title: item.title,
+              body: item.body,
+              created_at: moment(item.created_at).format("ddd, MMMM D YYYY, h:mm:ss A"),
+              updated_at: moment(item.updated_at).format("ddd, MMMM D YYYY, h:mm:ss A")
+            };
+            newResult.push(obj);
+          });
+          resolve(newResult);
         })
         .catch(function(err){
           reject({'error':err});

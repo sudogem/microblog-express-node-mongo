@@ -23,8 +23,8 @@ if (nodeEnv === 'development') {
 module.exports = {
 	mongoDbURL: mongoDbURL || 'mongodb://localhost/microblog-express-node-db',
   baseURLApi: baseURLApi || '//local.microblog2.com',
-  JWTTokenSecret: process.env.JWTTokenSecret || '91fe211053c6377ddfd218a061f96'
-  userSaltKey: process.env.userSaltKey || 'lQBWRNBZDqDMBacI7lTwaE2zChNMRyVJsgI2B5NQfww='
+  JWTTokenSecret: process.env.JWTTokenSecret || '91fe211053c6377ddfd218a061f96',
+  userSaltKey: process.env.userSaltKey || '$2a$08$AIqmMQHjc/5/Nz7hOWMHNu'
 };
 
 console.log('module.exports:',module.exports);

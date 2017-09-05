@@ -35,9 +35,10 @@ UserSchema.virtual('password')
 })
 .set(function(value) {
   this._password = value;
-  var salt = bcrypt.genSaltSync(8);
+  // var salt = bcrypt.genSaltSync(8); // random generated salt
+  var salt = settings.userSaltKey;
   this.passwordHash = bcrypt.hashSync(value, salt);
-  // this.passwordHash = value; // clear password
+  // this.passwordHash = value; // for unencrypted password
 });
 
 UserSchema.virtual('passwordConfirmation')
@@ -82,13 +83,33 @@ var user = {
       var passwordHash = bcrypt.hashSync(userData.password, salt);
       User.findOne({'email': userData.email, 'passwordHash': passwordHash})
         .then(function(result) {
-          console.log('find result:',result);
+          console.log('User.find result:',result);
+          if (result) {
+            resolve(result);
+          } else {
+            resolve(false);
+          }
+        })
+        .catch( /* istanbul ignore next */ function(err){
+          console.log('User.find err:',err);
+          return reject(err);
+        });
+    });
+  },
+
+  findById: function(id) {
+    return new Promise(function(resolve, reject) {
+      console.log('User.findById id:',id);
+      User.findOne({_id: id})
+        .then(function(result){
+          console.log('User.findById result:',result);
           resolve(result);
         })
         .catch( /* istanbul ignore next */ function(err){
+          console.log('User.findById err:',err);
           return reject(err);
         });
-    }
+    });
   }
 };
 

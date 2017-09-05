@@ -2,7 +2,7 @@ var BasicStrategy   = require('passport-http').BasicStrategy;
 var jwt = require('jwt-simple');
 var moment = require('moment');
 var config = require('../settings');
-var UserModel = require('../../models/user');
+var UserModel = require('../models/user');
 
 module.exports = function(passport) {
   passport.use('api_login', new BasicStrategy(
@@ -15,38 +15,30 @@ module.exports = function(passport) {
         } else {
           authenticate({
             email: username,
-            passw: password,
-            _id: 123456789
+            _id: result._id
           }, done);
           return;
         }
-        // if (username === 'user@mail.com' && password === 'test') {
-        //   authenticate({
-        //     email: username,
-        //     passw: password,
-        //     _id: 123456789
-        //   }, done);
-        // } else {
-        //   return done(null, {'message': 'Invalid username/password. Please try again!'});
-        // }
       });
     }
   ));
 
   var validateAuth = function(username, password, done) {
-    console.log('username:',username);
-    console.log('pass:',password);
     if (username == '' || password == '') {
       return done({'message': 'Please enter your username/password.'});
     }
 
     UserModel.find({email: username, password: password})
       .then(function(result) {
-        console.log('result:',result);
-        return done(null, username);
+        if (result) {
+          // return done(null, username);
+          return done(null, result);
+        } else {
+          return done({'message': 'Invalid username/password. Please try again!'});
+        }
       })
       .catch(function(err) {
-        return done({'message': 'Invalid username/password. Please try again!'});
+        return done({'message': err});
       });
 
     // if (username === 'user@mail.com' && password === 'test') {

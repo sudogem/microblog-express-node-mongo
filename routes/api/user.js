@@ -24,7 +24,7 @@ module.exports = function(app, includes) {
   };
 
   var isAuthenticated = function(req, res) {
-    console.log('[routes/api/user.js] isAuthenticated() req.error:', req.error);
+    if (req.error) console.log('[routes/api/user.js] isAuthenticated() req.error:', req.error);
     return res.json({
       isAuthorized: (req.authenticated) ? true : false,
       message: (req.error && req.error.message) ? req.error.message : 'authenticated'

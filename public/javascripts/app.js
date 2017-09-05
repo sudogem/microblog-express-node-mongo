@@ -50,7 +50,6 @@ app.run(['$rootScope', '$window', '$cookies', '$location',
 .config(['$httpProvider', function($httpProvider) {
   // Automatically inject user token to HTTP header
   $httpProvider.interceptors.push('authorize');
-  // Automatically inject user token to HTTP header
   $httpProvider.interceptors.push('unauthorize');
   // Automatically cancel http request on route change
   // $httpProvider.interceptors.push('abort-request');
