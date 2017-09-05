@@ -20,7 +20,7 @@ switch(nodeEnv) {
             appName: 'microblog-express-node',
             JWTTokenSecret: process.env.JWTTokenSecret || '91fe211053c6377ddfd218a061f96'
           },
-          baseURLApi: process.env.baseURL_API_DEV,
+          baseURLApi: process.env.BASEURL_API_DEV,
           siteName: 'Microblog-Node (DEV)'
         }
       }
@@ -35,7 +35,7 @@ switch(nodeEnv) {
             appName: 'microblog-express-node',
             JWTTokenSecret: process.env.JWTTokenSecret || '91fe211053c6377ddfd218a061f96',
           },
-          baseURLApi: process.env.baseURL_API_PROD,
+          baseURLApi: process.env.BASEURL_API_PROD,
           siteName: 'Microblog-Node (PROD)'
         }
       }
