@@ -175,9 +175,13 @@ controller('SignupController', function(_, $rootScope, $scope, $http, $location,
     $http.post(endpoint, {"user": userObj})
       .success(function(data, status, headers, config){
         console.log('[SignupController] doSignup() data:',data);
-        // flash.setMessage('You have successfully registered.');
-        Flash.create('success', 'You have successfully registered.', 0, {class: 'custom-class', id: 'custom-id'}, true);
-        $location.path('/');
+        if (data && data.errors) {
+          $scope.form.formError = true;
+          $scope.form.error = data.errors;
+        } else {
+          Flash.create('success', 'You have successfully registered.', 0, {class: 'custom-class', id: 'custom-id'}, true);
+          $location.path('/');
+        }
       })
       .error(function(data, status, headers, config) {
         $scope.loading = false;

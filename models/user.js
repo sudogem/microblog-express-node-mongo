@@ -71,9 +71,20 @@ UserSchema.path('passwordHash').validate(function(v) {
 var user = {
   create: function(userData) {
     return new Promise(function(resolve, reject) {
-      User.create(userData)
+      User.findOne({email: userData.email})
         .then(function(result) {
-          resolve(result);
+          console.log('User.create result:',result);
+          if (result) {
+            resolve(false);
+          } else {
+            User.create(userData)
+              .then(function(result) {
+                resolve(result);
+              })
+              .catch( /* istanbul ignore next */ function(err){
+                return reject(err);
+              });
+          }
         })
         .catch( /* istanbul ignore next */ function(err){
           return reject(err);
@@ -113,6 +124,23 @@ var user = {
           console.log('User.findById err:',err);
           return reject(err);
         });
+    });
+  },
+
+  updateArticles: function(authorId, postId) {
+    return new Promise(function(resolve, reject) {
+      User.findOne({_id: authorId}, function(err, user) {
+        if (user) {
+          user.articles.push(postId);
+          user.save(function(result) {
+            console.log('\n[models/user.js] updateArticles() Successfully saved...');
+            resolve(result);
+          });
+        } else {
+          console.log('\n[models/user.js] updateArticles() err:',err);
+          return reject(err);
+        }
+      });
     });
   }
 };

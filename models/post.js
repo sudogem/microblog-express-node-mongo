@@ -4,6 +4,7 @@ var Promise = require('bluebird');
 var moment = require('moment');
 var i18n = require('i18n');
 var _ = require('underscore');
+var UserModel = require('./user');
 
 var postSchema = {
   title: {
@@ -27,9 +28,20 @@ var post = {
       console.log('\n[models/posts.js] create() postData:',postData);
       Post.create(postData)
         .then(function(result) {
-          resolve(result);
+          console.log('\n[models/posts.js] create() result:',result);
+          UserModel.updateArticles(postData.author, result._id)
+            .then(function(result) {
+              console.log('\n[models/posts.js] create() User.findByIdAndUpdate result:',result);
+              resolve(result);
+            })
+            .catch(function(err){
+              console.log('\n[models/posts.js] create() User.findByIdAndUpdate err:',err);
+              return reject(err);
+            });
+          // resolve(result);
         })
         .catch(function(err){
+          console.log('\n[models/posts.js] create() err:',err);
           return reject(err);
         });
     });

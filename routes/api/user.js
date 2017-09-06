@@ -14,8 +14,12 @@ module.exports = function(app, includes) {
     }
     UserModel.create(userData)
       .then(function(result) {
+        if (result === false) {
+          res.status(200).json({errors: {'duplicateUser': {'message': 'Account already exist in database. Please try a new one.'}}});
+        } else {
+          res.status(200).json(result);
+        }
         console.log('[routes/api/user.js] createUser() result:',result);
-        res.status(200).json(result);
       })
       .catch(function(err) {
         console.log('[routes/api/user.js] createUser() err:',err);
