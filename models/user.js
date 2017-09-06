@@ -79,9 +79,11 @@ var user = {
           } else {
             User.create(userData)
               .then(function(result) {
+                console.log('User.create result:',result);
                 resolve(result);
               })
               .catch( /* istanbul ignore next */ function(err){
+                console.log('User.create err:',err);
                 return reject(err);
               });
           }

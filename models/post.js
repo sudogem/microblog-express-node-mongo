@@ -122,7 +122,9 @@ var post = {
                 _id: item._id,
                 title: item.title,
                 body: item.body,
-                author: item.author.fullname,
+                author_id: item.author._id,
+                author_email: item.author.email,
+                author_name: item.author.fullname,
                 created_at: moment(item.created_at).format("ddd, MMMM D YYYY, h:mm:ss A"),
                 updated_at: moment(item.updated_at).format("ddd, MMMM D YYYY, h:mm:ss A")
               };

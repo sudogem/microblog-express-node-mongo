@@ -26,7 +26,6 @@ module.exports = function(app, includes) {
       .then(function(result){
         console.log('[routes/api/post.js] getPost() result:',result);
         res.json({
-          'isAuthorized': (req.authenticated) ? true : false,
           'posts': result
         });
       })
@@ -43,7 +42,6 @@ module.exports = function(app, includes) {
         if(id) console.log('[routes/api/post.js] id:',id);
         console.log('[routes/api/post.js] getPost() result:',result);
         res.json({
-          'isAuthorized': (req.authenticated) ? true : false,
           'posts': result
         });
       })

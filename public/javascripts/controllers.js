@@ -2,25 +2,28 @@ angular.module('blog.controllers', []).
 controller('IndexController', function($rootScope, $scope, $http, $cookies, flash, utils, Flash) {
   $scope.activeTab = 'home';
   $scope.isAuthorized = false;
-  // console.log('[IndexController] env:', env);
   var currentUser = $cookies.getObject('user');
+  console.log('[IndexController] currentUser:',currentUser);
+  // console.log('[IndexController] globalUser:',$rootScope.globalUser);
   var token = '';
   if ($rootScope.globalUser || (currentUser && currentUser.token)) {
-    // $scope.isAuthorized = true;
     token = currentUser.token; // TODO: need to verify the token here..
   }
 
   $http.get('/api/post')
     .success(function(data, status, headers, config) {
       console.log('[IndexController] isAuthorized:',data);
-      console.log('[IndexController] flash.getMessage:',flash.getMessage() );
       $scope.total = data.posts.length;
       $scope.posts = data.posts;
-      // $scope.flash = flash;
-      $scope.isAuthorized = data.isAuthorized;
-      if(!data.isAuthorized){
-        $rootScope.globalUser = false;
+      if ($rootScope.globalUser) {
+        $scope.authenticatedUser = $rootScope.globalUser.user;
       }
+      console.log('[IndexController] authenticatedUser:',$scope.authenticatedUser);
+      // $scope.flash = flash;
+      // $scope.isAuthorized = data.isAuthorized;
+      // if(!data.isAuthorized){
+      //   $rootScope.globalUser = false;
+      // }
     })
     .error(function(data, status, headers, config) {
       $scope.isAuthorized = false;
