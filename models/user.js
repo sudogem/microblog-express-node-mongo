@@ -5,6 +5,7 @@ var moment = require('moment');
 var validator = require('validator');
 var bcrypt = require('bcrypt-nodejs');
 var settings = require('../settings');
+var _ = require('underscore');
 
 var userSchema = {
   _id: {
@@ -21,7 +22,7 @@ var userSchema = {
     type: String,
     required: [true, 'Email is required.'],
     unique: true,
-    validate: [{validator: validator.isEmail, msg: 'Invalid email.'}]
+    validate: [{validator: value => validator.isEmail(value), msg: 'Invalid email.'}]
   },
   passwordHash: {
     type: String,
@@ -80,7 +81,7 @@ var user = {
             User.create(userData)
               .then(function(result) {
                 console.log('User.create result:',result);
-                resolve(result);
+                resolve({'ok': 'Successfully created new user', 'id': result._id, 'data': result});
               })
               .catch( /* istanbul ignore next */ function(err){
                 console.log('User.create err:',err);
@@ -140,6 +141,36 @@ var user = {
           });
         } else {
           console.log('\n[models/user.js] updateArticles() err:',err);
+          return reject(err);
+        }
+      });
+    });
+  },
+
+  deleteUserArticles: function(authorId, postId) {
+    return new Promise(function(resolve, reject) {
+      postId = postId.toString();
+      User.findOne({_id: authorId}, function(err, user) {
+        if (user) {
+          // var updatedList = _.without(user.articles, JSON.stringify(postId)); // wont work..weird!!!
+          console.log('\n[models/user.js] deleteUserArticles() before list',user.articles);
+          console.log('\n[models/user.js] deleteUserArticles() before list',user.articles.length);
+          var updatedList = [];
+          _.each(user.articles, function(item) {
+            if (item.toString() === postId){ // we need to convert toString()
+              // simple escape the item
+            } else {
+              updatedList.push(item);
+            }
+          });
+          console.log('\n[models/user.js] deleteUserArticles() after list',updatedList);
+          user.articles = updatedList;
+          user.save(function(result) {
+            console.log('\n[models/user.js] deleteUserArticles() Successfully deleted article postId:',postId);
+            return resolve({'ok': 'Successfully deleted postId:'+postId});
+          });
+        } else {
+          console.log('\n[models/user.js] deleteUserArticles() err:',err);
           return reject(err);
         }
       });

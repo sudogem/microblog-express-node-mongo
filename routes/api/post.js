@@ -71,12 +71,13 @@ module.exports = function(app, includes) {
 
   deletePost = function(req, res) {
     var postId = req.params.id;
+    var userId = req.user.iss;
     if (!postId) {
       return res.status(400).json({'success': false, 'error': i18n.__('PostIdRequired')});
     }
-    PostModel.delete(postId)
+    PostModel.delete(userId, postId)
       .then(function(result){
-        console.log('[routes/api/post.js] deletePost result:',result);
+        console.log('[routes/api/post.js] deletePost result:',userId,result);
         if (result === null) {
           return res.status(404).json({'success': false, 'error': i18n.__('PostNotFound')});
         }

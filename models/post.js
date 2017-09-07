@@ -30,9 +30,9 @@ var post = {
         .then(function(result) {
           console.log('\n[models/posts.js] create() result:',result);
           UserModel.updateArticles(postData.author, result._id)
-            .then(function(result) {
-              console.log('\n[models/posts.js] create() User.findByIdAndUpdate result:',result);
-              resolve(result);
+            .then(function(result2) {
+              console.log('\n[models/posts.js] create() User.findByIdAndUpdate result:',result2);
+              resolve({'ok': 'Successfully created new post', 'id': result._id, 'data': result});
             })
             .catch(function(err){
               console.log('\n[models/posts.js] create() User.findByIdAndUpdate err:',err);
@@ -62,19 +62,40 @@ var post = {
         });
     });
   },
-  delete: function(postId) {
+  delete: function(authorId, postId) {
     return new Promise(function(resolve, reject) {
+      if (!authorId) {
+        return reject({'error': i18n.__('UserIdRequired')});
+      }
       if (!postId) {
         return reject({'error': i18n.__('PostIdRequired')});
       }
-      Post.findByIdAndRemove(postId)
+      Post.findOneAndRemove({_id: postId, author: authorId})
         .then(function(result) {
-          console.log('postId:',postId,'\n', result);
-          resolve(result);
+          console.log('\n[models/posts.js] delete() Post.findOneAndRemove result:',result);
+          UserModel.deleteUserArticles(authorId, postId)
+            .then(function(result) {
+              console.log('\n[models/posts.js] delete() UserModel.deleteUserArticles result:',result);
+              return resolve(result);
+            })
+            .catch(function(err){
+              console.log('\n[models/posts.js] delete() UserModel.deleteUserArticles err:',err);
+              return reject(err);
+            });
         })
         .catch(function(err){
+          console.log('\n[models/posts.js] delete() Post.findOneAndRemove err:',err);
           return reject(err);
         });
+
+      // Post.findByIdAndRemove(postId)
+      //   .then(function(result) {
+      //     console.log('postId:',postId,'\n', result);
+      //     resolve(result);
+      //   })
+      //   .catch(function(err){
+      //     return reject(err);
+      //   });
 
       // same as findByIdAndRemove()
       // Post.findByIdAndRemove(postId)

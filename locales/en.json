@@ -1,4 +1,5 @@
 {
-	"PostIdRequired": "Post Id is required.",
-	"PostNotFound": "Post not found!"
+  "PostIdRequired": "Post Id is required.",
+  "UserIdRequired": "User Id is required.",
+  "PostNotFound": "Post not found!"
 }
