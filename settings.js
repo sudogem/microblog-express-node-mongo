@@ -10,19 +10,19 @@ if (nodeEnv === 'development') {
   mongoDbURL = process.env.MONGODB_URL_DEV;
   baseURLApi = process.env.BASEURL_API_DEV;
   if (!baseURLApi) {
-    process.env['BASEURL_API_DEV'] = 'http://local.microblog2.com';
+    process.env['BASEURL_API_DEV'] = 'http://localhost:4001';
   }
 } else {
   mongoDbURL = process.env.MONGODB_URL_PROD;
   baseURLApi = process.env.OPENSHIFT_APP_DNS || process.env.BASEURL_API_PROD;
   if (!baseURLApi) {
-    process.env['BASEURL_API_PROD'] = 'http://local.microblog2.com';
+    process.env['BASEURL_API_PROD'] = 'http://localhost:4001';
   }
 }
 
 module.exports = {
 	mongoDbURL: mongoDbURL || 'mongodb://localhost/microblog-express-node-db',
-  baseURLApi: baseURLApi || '//local.microblog2.com',
+  baseURLApi: baseURLApi || 'http://localhost:4001',
   JWTTokenSecret: process.env.JWT_TOKEN_SECRET || '91fe211053c6377ddfd218a061f96',
   userSaltKey: process.env.USER_SALT_KEY || '$2a$08$AIqmMQHjc/5/Nz7hOWMHNu'
 };

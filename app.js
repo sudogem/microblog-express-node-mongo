@@ -60,7 +60,7 @@ var middleware = require('./routes/middleware.js');
 // routes
 app.use('/', routes);
 
-app.use(vhost(settings.baseURLApi, app));
+// app.use(vhost(settings.baseURLApi, app));
 
 var i18n = require('i18n');
 i18n.configure({
