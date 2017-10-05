@@ -21,10 +21,12 @@ if (nodeEnv === 'development') {
 }
 
 module.exports = {
-	mongoDbURL: mongoDbURL || 'mongodb://localhost/microblog-express-node-db',
+  mongoDbURL: mongoDbURL || 'mongodb://localhost/microblog-express-node-db',
   baseURLApi: baseURLApi || 'http://localhost:4001',
   JWTTokenSecret: process.env.JWT_TOKEN_SECRET || '91fe211053c6377ddfd218a061f96',
-  userSaltKey: process.env.USER_SALT_KEY || '$2a$08$AIqmMQHjc/5/Nz7hOWMHNu'
+  userSaltKey: process.env.USER_SALT_KEY || '$2a$08$AIqmMQHjc/5/Nz7hOWMHNu',
+  siteName: 'AngularJS 1 Blog',
+  siteDescription: 'Built using AngularJS 1.x, Pug, ExpressJS & MongoDB. Deployed to Openshift'
 };
 
 console.log('module.exports:',module.exports);

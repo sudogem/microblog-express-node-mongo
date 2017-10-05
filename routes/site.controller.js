@@ -32,11 +32,11 @@ module.exports = function(app, passport){
   /* GET home page. */
   router.get('/', function(req, res, next) {
     console.log('------------------------------------------');
-    console.log('[site.controller.js] [/] req.authenticated:',req.authenticated);
+    console.log('[site.controller.js] [/] req.authenticated:',settings,req.authenticated);
     res.render('index', {
-      title: 'AngularJS app',
+      title: settings.siteName,
       isAuthorized: (req.authenticated) ? true : false,
-      description: 'Built using AngularJS 1.x, Pug, ExpressJS & MongoDB. Deployed to Openshift'
+      description: settings.siteDescription
     });
   });
 

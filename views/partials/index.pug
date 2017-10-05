@@ -14,7 +14,7 @@ div(ng-if="(total > 0)")
     p(class='blog-post-meta') {{post.updated_at}}
     p(class='blog-post-meta') Name: {{post.author_name}}
     p(class='blog-post-meta') Email: {{post.author_email}}
-    p {{post.body}}
+    p(class='blog-post-body') {{post.body}}
     div(ng-if="authenticatedUser === post.author_email" class='actionButton')
       a(class='btn btn-info btn-round pad1' href='/#edit_post/{{post._id}}') Edit
       a(class='btn btn-danger btn-round' href='/#delete_post/{{post._id}}') Delete
