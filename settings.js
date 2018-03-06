@@ -3,6 +3,9 @@ var baseURLApi;
 var nodeEnv = process.env.NODE_ENV || 'development';
 
 if (nodeEnv === 'development') {
+  // Note: You can use docker based mongodb here
+  // URL: mongodb://{docker-host-ip}:{docker-host-port}/microblog-express-node-mongodb
+  // E.g., mongodb://192.168.99.100:27017/microblog-express-node-mongodb
   mongoDbURL = process.env.MONGODB_URL_DEV;
   if (!mongoDbURL) {
     process.env['MONGODB_URL_DEV'] = 'mongodb://localhost/microblog-express-node-db';
